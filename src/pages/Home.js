@@ -2,15 +2,15 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-export const Home = () => {
+const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [search, setSearch] = useState("");
 
-  //useEffect(() => {
-  //  axios
-  //    .get("/api/restaurants")
-  //    .then((response) => setRestaurants(response.data));
-  //}, []);
+  useEffect(() => {
+    axios
+      .get("/api/restaurants")
+      .then((response) => setRestaurants(response.data));
+  }, []);
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -51,3 +51,5 @@ export const Home = () => {
     </div>
   );
 };
+
+export default Home;
