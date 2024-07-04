@@ -8,7 +8,7 @@ const Restaurant = () => {
 
   useEffect(() => {
     axios
-      .get(`/api/restaurants/${id}`)
+      .get(`http://localhost:5002/api/restaurants/${id}`)
       .then((response) => setRestaurant(response.data));
   }, [id]);
 

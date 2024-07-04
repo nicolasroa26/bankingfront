@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-const Home = () => {
+export const Home = () => {
   const [restaurants, setRestaurants] = useState([]);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
     axios
-      .get("/api/restaurants")
+      .get("http://localhost:5002/api/restaurants")
       .then((response) => setRestaurants(response.data));
   }, []);
+
+  console.log("asdkhgasj");
 
   const handleSearch = (e) => {
     setSearch(e.target.value);
@@ -38,7 +40,7 @@ const Home = () => {
                 <h5 className="card-title">{restaurant.name}</h5>
                 <p className="card-text">{restaurant.description}</p>
                 <Link
-                  to={`/restaurant/${restaurant._id}`}
+                  to={`/protected/restaurant/${restaurant._id}`}
                   className="btn btn-primary"
                 >
                   View Menu
@@ -51,5 +53,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

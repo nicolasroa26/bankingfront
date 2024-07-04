@@ -8,7 +8,7 @@ export const fetchUser = async () => {
   if (!token) return null;
 
   try {
-    const response = await axios.get("/api/users/me", {
+    const response = await axios.get("http://localhost:5002/api/users/me", {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
