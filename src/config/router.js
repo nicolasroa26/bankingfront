@@ -15,6 +15,10 @@ const userLoader = async () => {
 
 export const router = createBrowserRouter([
   {
+    index: true,
+    element: <Login />,
+  },
+  {
     path: "/",
     element: <Navigate to="/login" />,
   },
