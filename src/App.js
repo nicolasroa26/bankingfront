@@ -3,12 +3,15 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./config/router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "./hooks/useAuth";
+import { CartProvider } from "./components/context/cartContext";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="your_google_client_id">
+    <GoogleOAuthProvider clientId="123">
       <AuthProvider>
-        <RouterProvider router={router} />
+        <CartProvider>
+          <RouterProvider router={router} />
+        </CartProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   );
