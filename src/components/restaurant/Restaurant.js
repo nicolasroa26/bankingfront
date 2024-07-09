@@ -10,13 +10,16 @@ import {
   Col,
   ListGroup,
   Alert,
+  Form,
 } from "react-bootstrap";
+
 const Restaurant = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
   const { state, dispatch } = useCart();
   const [total, setTotal] = useState(0);
   const [error, setError] = useState("");
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchRestaurant = async () => {
@@ -48,6 +51,16 @@ const Restaurant = () => {
     dispatch({ type: "REMOVE_FROM_CART", payload: dish });
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  const filteredDishes = restaurant
+    ? restaurant.dishes.filter((dish) =>
+        dish.name.toLowerCase().includes(search.toLowerCase())
+      )
+    : [];
+
   if (!restaurant) return <div>Loading...</div>;
 
   return (
@@ -55,8 +68,18 @@ const Restaurant = () => {
       <h1>{restaurant.name}</h1>
       <p>{restaurant.description}</p>
       {error && <Alert variant="danger">{error}</Alert>}
+
+      <Form.Group className="mb-3">
+        <Form.Control
+          type="text"
+          placeholder="Search for a dish..."
+          value={search}
+          onChange={handleSearch}
+        />
+      </Form.Group>
+
       <Row>
-        {restaurant.dishes.map((dish) => {
+        {filteredDishes.map((dish) => {
           const cartItem = state.cartItems.find(
             (item) => item._id === dish._id
           );
