@@ -8,7 +8,9 @@ export const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5002/api/restaurants")
+      .get(
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/restaurants"
+      )
       .then((response) => setRestaurants(response.data));
   }, []);
 

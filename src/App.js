@@ -7,7 +7,7 @@ import { CartProvider } from "./components/context/cartContext";
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="123">
+    <GoogleOAuthProvider clientId="974308017877-73jq35f1j3ndg8cvg0344nsimh2vbaij.apps.googleusercontent.com">
       <AuthProvider>
         <CartProvider>
           <RouterProvider router={router} />

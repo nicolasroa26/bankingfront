@@ -27,7 +27,7 @@ export const Login = () => {
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5002/api/users/login",
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/login",
         values
       );
       localStorage.setItem("token", response.data.token);
@@ -44,7 +44,7 @@ export const Login = () => {
   const handleGoogleSuccess = async (response) => {
     try {
       const res = await axios.post(
-        "http://localhost:5002/api/users/auth/google",
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/auth/google",
         {
           tokenId: response.credential,
         }

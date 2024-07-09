@@ -29,7 +29,7 @@ export const Register = () => {
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post(
-        "http://localhost:5002/api/users/register",
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/register",
         values
       );
       console.log(response);
