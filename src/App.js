@@ -3,7 +3,7 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./config/router";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "./hooks/useAuth";
-import { CartProvider } from "./components/context/cartContext";
+import { CartProvider } from "./context/cartContext";
 
 function App() {
   return (

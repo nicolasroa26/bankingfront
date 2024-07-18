@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import axios from "axios";
@@ -10,7 +10,17 @@ import { useAuth } from "../../hooks/useAuth";
 export const Login = () => {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [message, setMessage] = React.useState("");
+  const [message, setMessage] = useState("");
+  const [showMessage, setShowMessage] = useState(false);
+
+  useEffect(() => {
+    if (showMessage) {
+      const timer = setTimeout(() => {
+        setShowMessage(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showMessage]);
 
   const initialValues = {
     email: "",
@@ -32,11 +42,13 @@ export const Login = () => {
       );
       localStorage.setItem("token", response.data.token);
       setMessage("Login successful!");
+      setShowMessage(true);
       login(response.data);
       setSubmitting(false);
-      navigate("/protected/home");
+      navigate("/home");
     } catch (error) {
       setMessage("Invalid credentials");
+      setShowMessage(true);
       setSubmitting(false);
     }
   };
@@ -51,16 +63,18 @@ export const Login = () => {
       );
       localStorage.setItem("token", res.data.token);
       setMessage("Login successful!");
+      setShowMessage(true);
       navigate("/");
     } catch (error) {
       setMessage("Google authentication failed");
+      setShowMessage(true);
     }
   };
 
   return (
     <Container>
       <h1>Login</h1>
-      {message && <Alert variant="info">{message}</Alert>}
+      {showMessage && <Alert variant="info">{message}</Alert>}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -95,7 +109,10 @@ export const Login = () => {
       <div className="mt-3">
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
-          onError={() => setMessage("Google authentication failed")}
+          onError={() => {
+            setMessage("Google authentication failed");
+            setShowMessage(true);
+          }}
         />
       </div>
       <div className="mt-3">

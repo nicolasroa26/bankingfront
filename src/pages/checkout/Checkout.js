@@ -7,7 +7,7 @@ import {
   useElements,
 } from "@stripe/react-stripe-js";
 import axios from "axios";
-import { useCart } from "../context/cartContext";
+import { useCart } from "../../context/cartContext";
 import { Button, Form, Row, Col } from "react-bootstrap";
 
 const stripePromise = loadStripe(
@@ -51,7 +51,7 @@ const CheckoutForm = () => {
 
       try {
         const response = await axios.post(
-          "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/orders",
+          "http://localhost:5002/api/orders",
           orderDetails
         );
         console.log(response.data);

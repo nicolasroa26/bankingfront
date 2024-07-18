@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
-import { useCart } from "../context/cartContext";
+import { useCart } from "../../context/cartContext";
 import {
   Card,
   Button,
@@ -113,7 +113,7 @@ const Restaurant = () => {
       </Row>
       <div className="cart-summary mt-4">
         <h5>Total: ${total.toFixed(2)}</h5>
-        <Link to="/protected/cart" className="btn btn-success">
+        <Link to="/cart" className="btn btn-success">
           Go to Cart
         </Link>
       </div>

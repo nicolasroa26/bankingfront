@@ -9,6 +9,7 @@ import { GoogleLogin } from "@react-oauth/google";
 export const Register = () => {
   const navigate = useNavigate();
   const [message, setMessage] = React.useState("");
+  const [showMessage, setShowMessage] = React.useState(false);
 
   const initialValues = {
     name: "",
@@ -34,10 +35,18 @@ export const Register = () => {
       );
       console.log(response);
       setMessage("Account created successfully!");
-      setSubmitting(false);
-      navigate("/login");
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+        navigate("/login");
+      }, 5000);
     } catch (error) {
       setMessage("Error creating account: " + error.response.data.msg);
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+      }, 3000);
+    } finally {
       setSubmitting(false);
     }
   };
@@ -49,16 +58,24 @@ export const Register = () => {
       });
       localStorage.setItem("token", res.data.token);
       setMessage("Account created successfully with Google!");
-      navigate("/");
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+        navigate("/");
+      }, 3000);
     } catch (error) {
       setMessage("Google authentication failed");
+      setShowMessage(true);
+      setTimeout(() => {
+        setShowMessage(false);
+      }, 3000);
     }
   };
 
   return (
     <Container>
       <h1>Register</h1>
-      {message && <Alert variant="info">{message}</Alert>}
+      {showMessage && <Alert variant="info">{message}</Alert>}
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -102,7 +119,13 @@ export const Register = () => {
       <div className="mt-3">
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
-          onError={() => setMessage("Google authentication failed")}
+          onError={() => {
+            setMessage("Google authentication failed");
+            setShowMessage(true);
+            setTimeout(() => {
+              setShowMessage(false);
+            }, 3000);
+          }}
         />
       </div>
       <div className="mt-3">

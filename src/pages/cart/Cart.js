@@ -1,5 +1,5 @@
 import React from "react";
-import { useCart } from "../context/cartContext";
+import { useCart } from "../../context/cartContext";
 import { Link } from "react-router-dom";
 import {
   Button,
@@ -101,10 +101,10 @@ const Cart = () => {
           .toFixed(2)}
       </h4>
       <div className="mt-4 d-flex justify-content-between">
-        <Link to="/protected/home">
+        <Link to="/home">
           <Button variant="secondary">Back to Restaurants</Button>
         </Link>
-        <Link to="/protected/checkout">
+        <Link to="/checkout">
           <Button variant="primary">Proceed to Checkout</Button>
         </Link>
       </div>

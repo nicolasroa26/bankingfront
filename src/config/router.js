@@ -1,17 +1,25 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import { Home } from "../pages/Home";
-import { Register } from "../components/auth/Register";
-import { Login } from "../components/auth/Login";
+import { createBrowserRouter, Navigate, Outlet } from "react-router-dom";
+import { Home } from "../pages/home/Home";
+import { Register } from "../pages/auth/Register";
+import { Login } from "../pages/auth/Login";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { fetchUser } from "../hooks/useAuth";
-import Restaurant from "../components/restaurant/Restaurant";
-import Cart from "../components/cart/Cart";
-import Checkout from "../components/checkout/Checkout";
+import Restaurant from "../pages/restaurant/Restaurant";
+import Cart from "../pages/cart/Cart";
+import Checkout from "../pages/checkout/Checkout";
+import Header from "../components/Header";
 
 const userLoader = async () => {
   const user = await fetchUser();
   return { user };
 };
+
+const ProtectedLayout = () => (
+  <>
+    <Header />
+    <Outlet />
+  </>
+);
 
 export const router = createBrowserRouter([
   {
@@ -31,14 +39,19 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "protected",
+    path: "/",
     element: <ProtectedRoute />,
     loader: userLoader,
     children: [
-      { path: "home", element: <Home /> },
-      { path: "restaurant/:id", element: <Restaurant /> },
-      { path: "cart", element: <Cart /> },
-      { path: "checkout", element: <Checkout /> },
+      {
+        element: <ProtectedLayout />,
+        children: [
+          { path: "home", element: <Home /> },
+          { path: "restaurant/:id", element: <Restaurant /> },
+          { path: "cart", element: <Cart /> },
+          { path: "checkout", element: <Checkout /> },
+        ],
+      },
     ],
   },
 ]);
