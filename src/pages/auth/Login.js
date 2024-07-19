@@ -37,10 +37,11 @@ export const Login = () => {
   const onSubmit = async (values, { setSubmitting }) => {
     try {
       const response = await axios.post(
-        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/login",
+        "http://localhost:5002/api/users/login",
         values
       );
       localStorage.setItem("token", response.data.token);
+      console.log(response.data.token);
       setMessage("Login successful!");
       setShowMessage(true);
       login(response.data);

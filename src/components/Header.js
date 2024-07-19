@@ -13,19 +13,17 @@ const Header = () => {
   };
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" className="shadow-sm mb-4 custom-navbar">
       <Container>
-        <Navbar.Brand href="/home">Restaurant App</Navbar.Brand>
+        <Navbar.Brand className="custom-brand">Restaurant App</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="/home">Home</Nav.Link>
-            <Nav.Link href="/cart">Cart</Nav.Link>
-            <Nav.Link href="/profile">Profile</Nav.Link>
+            <Nav.Link className="custom-nav-link">Home</Nav.Link>
           </Nav>
           <Nav>
-            <Nav.Item className="me-3">
-              <span>{user?.email}</span>
+            <Nav.Item className="me-3 d-flex align-items-center">
+              <span className="user-name">{user?.name}</span>
             </Nav.Item>
             <Button variant="outline-danger" onClick={handleLogout}>
               Logout

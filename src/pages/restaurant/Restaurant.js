@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import { useCart } from "../../context/cartContext";
+import { useRestaurant } from "../../context/restaurantContext";
 import {
   Card,
   Button,
@@ -11,17 +12,21 @@ import {
   ListGroup,
   Alert,
   Form,
+  InputGroup,
+  FormControl,
 } from "react-bootstrap";
 
 const Restaurant = () => {
   const { id } = useParams();
   const [restaurant, setRestaurant] = useState(null);
+  const { setRestaurantId } = useRestaurant();
   const { state, dispatch } = useCart();
   const [total, setTotal] = useState(0);
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
 
   useEffect(() => {
+    setRestaurantId(id);
     const fetchRestaurant = async () => {
       try {
         const response = await axios.get(
@@ -47,8 +52,33 @@ const Restaurant = () => {
     dispatch({ type: "ADD_TO_CART", payload: { ...dish, quantity: 1 } });
   };
 
+  const decrementQuantity = (id) => {
+    const item = state.cartItems.find((item) => item._id === id);
+    if (item.quantity === 1) {
+      removeFromCart(id);
+    } else {
+      dispatch({
+        type: "UPDATE_QUANTITY",
+        payload: { _id: id, quantity: item.quantity - 1 },
+      });
+    }
+  };
+
+  const incrementQuantity = (id) => {
+    const item = state.cartItems.find((item) => item._id === id);
+    dispatch({
+      type: "UPDATE_QUANTITY",
+      payload: { _id: id, quantity: item.quantity + 1 },
+    });
+  };
+
   const removeFromCart = (dish) => {
     dispatch({ type: "REMOVE_FROM_CART", payload: dish });
+  };
+
+  const updateQuantity = (id, quantity) => {
+    if (quantity < 1) return;
+    dispatch({ type: "UPDATE_QUANTITY", payload: { _id: id, quantity } });
   };
 
   const handleSearch = (e) => {
@@ -89,21 +119,49 @@ const Restaurant = () => {
                 <Card.Body>
                   <Card.Title>{dish.name}</Card.Title>
                   <Card.Text>${dish.price.toFixed(2)}</Card.Text>
-                  <Button variant="primary" onClick={() => addToCart(dish)}>
-                    Add to Cart
-                  </Button>
-                  {cartItem && (
-                    <div className="mt-2">
+                  {cartItem ? (
+                    <div className="d-flex align-items-center">
                       <Button
                         variant="danger"
+                        size="sm"
+                        onClick={() => decrementQuantity(dish._id)}
+                      >
+                        -
+                      </Button>
+                      <InputGroup
+                        size="sm"
+                        className="mx-2"
+                        style={{ width: "60px" }}
+                      >
+                        <FormControl
+                          type="number"
+                          value={cartItem.quantity}
+                          onChange={(e) =>
+                            updateQuantity(dish._id, parseInt(e.target.value))
+                          }
+                          min="1"
+                        />
+                      </InputGroup>
+                      <Button
+                        variant="success"
+                        size="sm"
+                        onClick={() => incrementQuantity(dish._id)}
+                      >
+                        +
+                      </Button>
+                      <Button
+                        variant="danger"
+                        size="sm"
+                        className="ml-2"
                         onClick={() => removeFromCart(dish)}
                       >
-                        Remove from Cart
+                        Remove
                       </Button>
-                      <span className="ml-2">
-                        Quantity: {cartItem.quantity}
-                      </span>
                     </div>
+                  ) : (
+                    <Button variant="primary" onClick={() => addToCart(dish)}>
+                      Add to Cart
+                    </Button>
                   )}
                 </Card.Body>
               </Card>

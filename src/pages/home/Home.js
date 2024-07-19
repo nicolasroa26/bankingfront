@@ -14,8 +14,6 @@ export const Home = () => {
       .then((response) => setRestaurants(response.data));
   }, []);
 
-  console.log("asdkhgasj");
-
   const handleSearch = (e) => {
     setSearch(e.target.value);
   };

@@ -9,12 +9,14 @@ import {
 import axios from "axios";
 import { useCart } from "../../context/cartContext";
 import { Button, Form, Row, Col } from "react-bootstrap";
+import { useAuth } from "../../hooks/useAuth";
+import { useRestaurant } from "../../context/restaurantContext";
 
 const stripePromise = loadStripe(
   "pk_test_51PXxKbHEpkFeHCWbeU9HFQ16yy3jnLrZQodAUBxcSMchGxlW63daX7eRMGDLaBs3lgNGlC6T9njq9UL2nZLppbNi00sWfKwXMr"
 );
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ restaurantId }) => {
   const stripe = useStripe();
   const elements = useElements();
   const { state } = useCart();
@@ -24,46 +26,55 @@ const CheckoutForm = () => {
   const [city, setCity] = useState("");
   const [stateField, setStateField] = useState("");
 
+  const { user } = useAuth();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: elements.getElement(CardElement),
-      billing_details: {
-        address: {
-          line1: address,
-          city: city,
-          state: stateField,
-        },
-      },
-    });
 
-    if (!error) {
-      const { id } = paymentMethod;
+    try {
       const orderDetails = {
-        userId: "1",
-        restaurantId: "66869b0a393b31faba596122",
+        userId: user.id,
+        restaurantId,
         dishes: state.cartItems,
-        token: id,
         address: { line1: address, city, state: stateField },
       };
 
-      try {
-        const response = await axios.post(
-          "http://localhost:5002/api/orders",
-          orderDetails
-        );
-        console.log(response.data);
+      const { data } = await axios.post(
+        "http://localhost:5002/api/orders",
+        orderDetails
+      );
+
+      const { clientSecret } = data;
+
+      const { error, paymentIntent } = await stripe.confirmCardPayment(
+        clientSecret,
+        {
+          payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: {
+              address: {
+                line1: address,
+                city: city,
+                state: stateField,
+              },
+            },
+          },
+        }
+      );
+
+      if (error) {
+        setMessage(error.message);
+      } else if (paymentIntent.status === "succeeded") {
         setMessage("Payment successful!");
-      } catch (err) {
-        console.error(err);
-        setMessage("Payment failed. Please try again.");
+      } else {
+        setMessage("Payment processing.");
       }
-    } else {
-      console.error(error);
-      setMessage(error.message);
+    } catch (err) {
+      console.error(err);
+      setMessage("Payment failed. Please try again.");
     }
+
     setLoading(false);
   };
 
@@ -136,11 +147,12 @@ const CheckoutForm = () => {
 };
 
 const Checkout = () => {
+  const { restaurantId } = useRestaurant();
   return (
     <Elements stripe={stripePromise}>
       <div className="container mt-5">
         <h2>Checkout</h2>
-        <CheckoutForm />
+        <CheckoutForm restaurantId={restaurantId} />
       </div>
     </Elements>
   );

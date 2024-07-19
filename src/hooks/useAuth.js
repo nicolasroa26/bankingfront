@@ -8,15 +8,16 @@ export const fetchUser = async () => {
   if (!token) return null;
 
   try {
-    const response = await axios.get(
-      "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/me",
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
+    const response = await axios.get("http://localhost:5002/api/users/me", {
+      headers: { Authorization: `${token}` },
+    });
     return response.data;
   } catch (error) {
-    console.error("Error fetching user", error);
+    if (error.response && error.response.status === 401) {
+      console.error("Session expired", error);
+    } else {
+      console.error("Error fetching user", error);
+    }
     localStorage.removeItem("token");
     return null;
   }
@@ -38,7 +39,6 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData) => {
     localStorage.setItem("token", userData.token);
-    setUser(userData);
   };
 
   const logout = () => {
