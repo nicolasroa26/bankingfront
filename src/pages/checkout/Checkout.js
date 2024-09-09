@@ -41,7 +41,7 @@ const CheckoutForm = ({ restaurantId }) => {
       };
 
       const { data } = await axios.post(
-        "http://localhost:5002/api/orders",
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/orders",
         orderDetails
       );
 

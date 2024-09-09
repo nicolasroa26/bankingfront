@@ -10,7 +10,6 @@ import Checkout from "../pages/checkout/Checkout";
 import Header from "../components/Header";
 
 const userLoader = async () => {
-  console.log("asjkldhiasj");
   const user = await fetchUser();
   return { user };
 };
@@ -40,7 +39,7 @@ export const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: "/",
+    path: "/protected",
     element: <ProtectedRoute />,
     loader: userLoader,
     children: [

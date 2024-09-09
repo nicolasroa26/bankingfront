@@ -101,10 +101,10 @@ const Cart = () => {
           .toFixed(2)}
       </h4>
       <div className="mt-4 d-flex justify-content-between">
-        <Link to="/home">
+        <Link to="/protected/home">
           <Button variant="secondary">Back to Restaurants</Button>
         </Link>
-        <Link to="/checkout">
+        <Link to="/protected/checkout">
           <Button variant="primary">Proceed to Checkout</Button>
         </Link>
       </div>

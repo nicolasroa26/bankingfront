@@ -40,7 +40,7 @@ export const Home = () => {
                 <h5 className="card-title">{restaurant.name}</h5>
                 <p className="card-text">{restaurant.description}</p>
                 <Link
-                  to={`/restaurant/${restaurant._id}`}
+                  to={`/protected/restaurant/${restaurant._id}`}
                   className="btn btn-primary"
                 >
                   View Menu

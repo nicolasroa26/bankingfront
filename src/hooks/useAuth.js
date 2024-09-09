@@ -8,9 +8,12 @@ export const fetchUser = async () => {
   if (!token) return null;
 
   try {
-    const response = await axios.get("http://localhost:5002/api/users/me", {
-      headers: { Authorization: `${token}` },
-    });
+    const response = await axios.get(
+      "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/me",
+      {
+        headers: { Authorization: `${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
     if (error.response && error.response.status === 401) {

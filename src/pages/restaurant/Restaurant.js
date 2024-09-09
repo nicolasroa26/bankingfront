@@ -171,7 +171,7 @@ const Restaurant = () => {
       </Row>
       <div className="cart-summary mt-4">
         <h5>Total: ${total.toFixed(2)}</h5>
-        <Link to="/cart" className="btn btn-success">
+        <Link to="/protected/cart" className="btn btn-success">
           Go to Cart
         </Link>
       </div>

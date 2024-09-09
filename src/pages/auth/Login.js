@@ -36,17 +36,23 @@ export const Login = () => {
 
   const onSubmit = async (values, { setSubmitting }) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5002/api/users/login",
-        values
-      );
-      localStorage.setItem("token", response.data.token);
-      console.log(response.data.token);
-      setMessage("Login successful!");
-      setShowMessage(true);
-      login(response.data);
-      setSubmitting(false);
-      navigate("/home");
+      axios
+        .post(
+          "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/login",
+          values
+        )
+        .then((response) => {
+          console.log("sirvio");
+          localStorage.setItem("token", response.data.token);
+          setMessage("Login successful!");
+          setShowMessage(true);
+          login(response.data);
+          navigate("/protected/home");
+          setSubmitting(false);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     } catch (error) {
       setMessage("Invalid credentials");
       setShowMessage(true);
