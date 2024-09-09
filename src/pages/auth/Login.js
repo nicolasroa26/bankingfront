@@ -35,29 +35,26 @@ export const Login = () => {
   });
 
   const onSubmit = async (values, { setSubmitting }) => {
-    try {
-      axios
-        .post(
-          "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/login",
-          values
-        )
-        .then((response) => {
-          console.log("sirvio");
-          localStorage.setItem("token", response.data.token);
-          setMessage("Login successful!");
-          setShowMessage(true);
-          login(response.data);
-          navigate("/protected/home");
-          setSubmitting(false);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    } catch (error) {
-      setMessage("Invalid credentials");
-      setShowMessage(true);
-      setSubmitting(false);
-    }
+    axios
+      .post(
+        "https://restaurantfullstack-20d2bcfb0f21.herokuapp.com/api/users/login",
+        values
+      )
+      .then((response) => {
+        console.log("sirvio");
+        localStorage.setItem("token", response.data.token);
+        setMessage("Login successful!");
+        setShowMessage(true);
+        login(response.data);
+        navigate("/protected/home");
+        console.log("hola");
+        setSubmitting(false);
+      })
+      .catch((err) => {
+        setMessage("Invalid credentials");
+        setShowMessage(true);
+        setSubmitting(false);
+      });
   };
 
   const handleGoogleSuccess = async (response) => {

@@ -40,8 +40,10 @@ export const AuthProvider = ({ children }) => {
     initializeUser();
   }, []);
 
-  const login = (userData) => {
+  const login = async (userData) => {
     localStorage.setItem("token", userData.token);
+    const fetchedUser = await fetchUser();
+    setUser(fetchedUser);
   };
 
   const logout = () => {
